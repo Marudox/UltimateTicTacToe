@@ -3,7 +3,7 @@ package org.example.BusinessLogic;
 import org.junit.jupiter.api.Test;
 
 class GameControllerTest {
-    private GameController gameController = new GameController();
+    private final GameController gameController = new GameController();
 
     @Test
     void setGrid() {

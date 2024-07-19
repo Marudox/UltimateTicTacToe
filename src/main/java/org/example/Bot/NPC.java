@@ -1,8 +1,6 @@
 package org.example.Bot;
 
 import org.example.BusinessLogic.GameController;
-import org.example.Dto.SmallGridDto;
-import org.example.GUI.PlayBoard;
 
 import java.util.Random;
 

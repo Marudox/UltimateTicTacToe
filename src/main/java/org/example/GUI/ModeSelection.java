@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ModeSelection extends JFrame implements ActionListener {
-    private JButton bPvP;
-    private JButton bPvC;
+    private final JButton bPvP;
+    private final JButton bPvC;
 
     public ModeSelection() {
         super("Ultimate Tic-Tac-Toe");

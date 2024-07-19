@@ -1,8 +1,8 @@
 package org.example.Dto;
 
 public class PlayerDto {
-    private int player;
-    private String playerSymbol;
+    private final int player;
+    private final String playerSymbol;
 
     public PlayerDto(int player, String playerSymbol) {
         this.player = player;

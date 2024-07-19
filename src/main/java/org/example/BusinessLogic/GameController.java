@@ -20,8 +20,8 @@ public class GameController {
     private List<SmallGridDto> grid = new ArrayList<>();
     private final PlayBoard playBoard;
     private PlayerDto currentPlayer;
-    private PlayerDto playerOne = new PlayerDto(1, "X");
-    private PlayerDto playerTwo = new PlayerDto(2, "O");
+    private final PlayerDto playerOne = new PlayerDto(1, "X");
+    private final PlayerDto playerTwo = new PlayerDto(2, "O");
     private final Modes mode;
     private NPC npc;
 
