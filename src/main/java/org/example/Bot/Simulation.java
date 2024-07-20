@@ -22,6 +22,15 @@ public class Simulation {
         this.previousGrid = previousGrid;
     }
 
+    public int[] simulate(PlayerDto movePlayer) {
+        int[] count = new int[3];
+        for (int i = 0; i < 2000; i++) {
+            count[makeRandomMove(movePlayer) + 1]++;
+            gameController.setGrid(previousGrid);
+        }
+        return count;
+    }
+
     public int makeRandomMove(PlayerDto movePlayer) {
         while (!gameController.isGameWon()) {
             List<int[]> moves = getListOfMoves(gameController.getGrid());
@@ -42,6 +51,13 @@ public class Simulation {
         }
     }
 
+    public void makeMove(int[] move) {
+        SmallGridDto smallGridDto = gameController.getGrid().get(move[0]);
+        ButtonDto buttonDto = smallGridDto.getSmallGrid().get(move[1]);
+
+        gameController.pressButton(smallGridDto, buttonDto);
+    }
+
     public static List<int[]> getListOfMoves(List<SmallGridDto> grid) {
         List<int[]> moves = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
@@ -55,21 +71,5 @@ public class Simulation {
             }
         }
         return moves;
-    }
-
-    public int[] simulate(PlayerDto movePlayer) {
-        int[] count = new int[3];
-        for (int i = 0; i < 2000; i++) {
-            count[makeRandomMove(movePlayer)+1] ++;
-            gameController.setGrid(previousGrid);
-        }
-        return count;
-    }
-
-    public void makeMove(int[] move) {
-        SmallGridDto smallGridDto = gameController.getGrid().get(move[0]);
-        ButtonDto buttonDto = smallGridDto.getSmallGrid().get(move[1]);
-
-        gameController.pressButton(smallGridDto, buttonDto);
     }
 }

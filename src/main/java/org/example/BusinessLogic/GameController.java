@@ -38,7 +38,7 @@ public class GameController {
 
     public void pressButton(SmallGridDto smallGridDto, ButtonDto buttonDto) {
         JButton button = buttonDto.getButton();
-        if (currentPlayer == playerOne) {
+        if (!currentPlayer.isNPC()) {
             if (mode == Modes.PVC) {
                 playBoard.setEnabled(false);
             }
@@ -76,7 +76,7 @@ public class GameController {
 
             playBoard.updateCurrentPlayer(currentPlayer);
 
-            if (mode == Modes.PVC && currentPlayer.isNPC()) {
+            if (currentPlayer.isNPC()) {
                 currentPlayer.getNpc().makeMove();
             }
         }
@@ -123,16 +123,17 @@ public class GameController {
     private void smallFieldCompleted(List<ButtonDto> smallField, PlayerDto player) {
         smallField.forEach(button -> button.getButton().setText(""));
         if (player.equals(playerTwo)) {
-            smallField.get(1).getButton().setBackground(Color.RED);
-            smallField.get(3).getButton().setBackground(Color.RED);
-            smallField.get(5).getButton().setBackground(Color.RED);
-            smallField.get(7).getButton().setBackground(Color.RED);
+            for (int i = 0; i < 9; i++) {
+                if (i % 2 != 0) {
+                    smallField.get(i).getButton().setBackground(Color.RED);
+                }
+            }
         } else if (player.equals(playerOne)) {
-            smallField.get(0).getButton().setBackground(Color.BLUE);
-            smallField.get(2).getButton().setBackground(Color.BLUE);
-            smallField.get(4).getButton().setBackground(Color.BLUE);
-            smallField.get(6).getButton().setBackground(Color.BLUE);
-            smallField.get(8).getButton().setBackground(Color.BLUE);
+            for (int i = 0; i < 9; i++) {
+                if (i % 2 == 0) {
+                    smallField.get(i).getButton().setBackground(Color.BLUE);
+                }
+            }
         }
     }
 

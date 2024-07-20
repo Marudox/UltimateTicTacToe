@@ -3,7 +3,7 @@ package org.example.Dto;
 import java.util.List;
 
 public class SmallGridDto {
-    private List<ButtonDto> smallGrid;
+    private final List<ButtonDto> smallGrid;
     private boolean isActive;
     private boolean won = false;
     private PlayerDto winner;
