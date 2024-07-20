@@ -20,9 +20,9 @@ public class PlayBoard extends JFrame implements ActionListener {
 
     private GameController gameController;
 
-    private JLabel label;
-    private JButton button;
-    private JButton bRestart;
+    private final JLabel label;
+    private final JButton button;
+    private final JButton bRestart;
 
     public PlayBoard(Modes mode) {
         super("Ultimate Tic-Tac-Toe");

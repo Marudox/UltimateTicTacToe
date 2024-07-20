@@ -13,7 +13,6 @@ public class Simulation {
 
     private final SimulationGameController gameController;
     private final List<SmallGridDto> previousGrid;
-    private final PlayerDto startingPlayer;
 
     public Simulation(GameController gameController, List<SmallGridDto> previousGrid) {
         this.gameController = new SimulationGameController(gameController.getGrid(),
@@ -21,7 +20,6 @@ public class Simulation {
                 gameController.getPlayer(1),
                 gameController.getPlayer(2));
         this.previousGrid = previousGrid;
-        this.startingPlayer = gameController.getCurrentPlayer();
     }
 
     public int makeRandomMove(PlayerDto movePlayer) {

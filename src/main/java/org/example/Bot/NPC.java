@@ -14,7 +14,7 @@ public class NPC {
         this.gameController = gameController;
     }
 
-    public void makeMove(int grid) {
+    public void makeMove() {
         int[] bestMove = giveBestMove();
 
         assert bestMove != null;
@@ -43,9 +43,7 @@ public class NPC {
     private List<int[]> evaluateMoves(List<int[]> moves) {
         List<SmallGridDto> originalGrid = gameController.getGrid();
         List<int[]> results = new ArrayList<>();
-        moves.forEach(move -> {
-            results.add(evaluateMove(originalGrid, move));
-        });
+        moves.forEach(move -> results.add(evaluateMove(originalGrid, move)));
         return results;
     }
 

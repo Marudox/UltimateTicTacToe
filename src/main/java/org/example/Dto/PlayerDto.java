@@ -17,14 +17,6 @@ public class PlayerDto {
         this.npc = null;
     }
 
-    public PlayerDto(int playerNumber, String playerSymbol, NPC npc) {
-        this.playerNumber = playerNumber;
-        this.playerSymbol = playerSymbol;
-        playerColor = "X".equals(playerSymbol) ? "blue" : "red";
-        this.isNPC = true;
-        this.npc = npc;
-    }
-
     public int getPlayerNumber() {
         return playerNumber;
     }

@@ -77,7 +77,7 @@ public class GameController {
             playBoard.updateCurrentPlayer(currentPlayer);
 
             if (mode == Modes.PVC && currentPlayer.isNPC()) {
-                currentPlayer.getNpc().makeMove(field);
+                currentPlayer.getNpc().makeMove();
             }
         }
     }

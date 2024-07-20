@@ -33,10 +33,6 @@ public class SmallGridDto {
         return smallGrid;
     }
 
-    public void setSmallGrid(List<ButtonDto> smallGrid) {
-        this.smallGrid = smallGrid;
-    }
-
     public boolean isWon() {
         return won;
     }

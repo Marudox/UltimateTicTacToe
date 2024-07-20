@@ -7,7 +7,6 @@ import org.example.Dto.SmallGridDto;
 import org.example.Modes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.example.BusinessLogic.WinCheck.checkBigWin;
