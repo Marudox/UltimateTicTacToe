@@ -1,6 +1,6 @@
 package org.example.BusinessLogic;
 
-import org.example.Bot.NPC;
+import org.example.Dto.ButtonDto;
 import org.example.Dto.PlayerDto;
 import org.example.GUI.PlayBoard;
 import org.example.Dto.SmallGridDto;
@@ -9,7 +9,6 @@ import org.example.Modes;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.example.BusinessLogic.WinCheck.checkBigWin;
@@ -18,64 +17,68 @@ import static org.example.BusinessLogic.WinCheck.checkSmallWin;
 public class GameController {
 
     private List<SmallGridDto> grid = new ArrayList<>();
-    private final PlayBoard playBoard;
+    private PlayBoard playBoard;
+    private PlayerDto playerOne;
+    private PlayerDto playerTwo;
     private PlayerDto currentPlayer;
-    private final PlayerDto playerOne = new PlayerDto(1, "X");
-    private final PlayerDto playerTwo = new PlayerDto(2, "O");
-    private final Modes mode;
-    private NPC npc;
-
+    private Modes mode;
     public GameController() {
-        this.playBoard = new PlayBoard(Modes.PVC);
-        this.mode = Modes.PVC;
+
     }
 
-    public GameController(PlayBoard playBoard, Modes mode) {
+    public GameController(PlayBoard playBoard, Modes mode, PlayerDto playerOne, PlayerDto playerTwo) {
         this.playBoard = playBoard;
         this.mode = mode;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+        currentPlayer = playerOne;
     }
 
-    public void pressButton(SmallGridDto smallGridDto, int row, int column) {
-        JButton button = smallGridDto.getSmallGrid()[row][column];
-        boolean npcTurn = false;
+
+
+    public void pressButton(SmallGridDto smallGridDto, ButtonDto buttonDto) {
+        JButton button = buttonDto.getButton();
         if (currentPlayer == playerOne) {
-            button.setText("O");
             if (mode == Modes.PVC) {
-                npcTurn = true;
                 playBoard.setEnabled(false);
             }
         } else {
-            button.setText("X");
             if (mode == Modes.PVC) {
                 playBoard.setEnabled(true);
             }
         }
-
+        buttonDto.setPlayed(true);
+        buttonDto.setPlayer(currentPlayer);
+        button.setText("<html><font color = "+currentPlayer.getPlayerColor()+">"+currentPlayer.getPlayerSymbol()+"</font></html>");
         button.setEnabled(false);
 
         disableButtons();
 
         if (checkSmallWin(smallGridDto)) {
             smallFieldCompleted(smallGridDto.getSmallGrid(), currentPlayer);
-            int fieldIndex = grid.indexOf(smallGridDto);
-            grid.get(fieldIndex).setWinner(currentPlayer);
+
+            smallGridDto.setWinner(currentPlayer);
         }
 
-        enableNextField(row, column);
+        int field = smallGridDto.getSmallGrid().indexOf(buttonDto);
+
+        enableField(field);
 
         if (checkBigWin(grid)) {
-            playBoard.showWinDialog(currentPlayer);
             disableButtons();
-        }
-
-        if (currentPlayer == playerOne) {
-            currentPlayer = playerTwo;
+            playBoard.showWinDialog(currentPlayer);
         } else {
-            currentPlayer = playerOne;
-        }
+            if (currentPlayer == playerOne) {
+                currentPlayer = playerTwo;
+            } else {
+                currentPlayer = playerOne;
+            }
 
-        if (npcTurn) {
-            npc.makeMove(row, column);
+            playBoard.updateCurrentPlayer(currentPlayer);
+
+            if (mode == Modes.PVC && currentPlayer.isNPC()) {
+                currentPlayer.getNpc().makeMove(field);
+            }
         }
     }
 
@@ -83,32 +86,23 @@ public class GameController {
         this.grid = grid;
     }
 
-    private void enableNextField(int j, int k) {
-        if (j < 1) {
-            enableField(j + k);
-        } else if (j < 2) {
-            enableField(j +2 + k);
-        } else {
-            enableField(j +4 + k);
-        }
-    }
-
-    private void enableAllField() {
+    protected void enableAllField() {
         for (int i = 0; i < 9; i++) {
-            enableField(i);
+            if (!grid.get(i).isWon()) {
+                enableField(i);
+            }
         }
     }
 
     public void enableField(int field) {
         if (grid.get(field) != null && !grid.get(field).isWon()) {
-            JButton[][] smallField = grid.get(field).getSmallGrid();
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    if (fieldIsPlayed(smallField[j][k])) {
-                        smallField[j][k].setEnabled(true);
-                    }
+            SmallGridDto smallField = grid.get(field);
+            smallField.getSmallGrid().forEach(button -> {
+                if (!button.isPlayed()) {
+                    button.getButton().setEnabled(true);
                 }
-            }
+            });
+            smallField.setActive(true);
         } else {
             enableAllField();
         }
@@ -116,13 +110,9 @@ public class GameController {
 
     public void disableButtons() {
         grid.forEach(smallGridDto -> {
-            JButton[][] smallField = smallGridDto.getSmallGrid();
+            List<ButtonDto> smallField = smallGridDto.getSmallGrid();
             if (smallField != null) {
-                for (int j = 0; j < 3; j++) {
-                    for (int k = 0; k < 3; k++) {
-                        smallField[j][k].setEnabled(false);
-                    }
-                }
+                smallField.forEach(button -> button.getButton().setEnabled(false));
                 smallGridDto.setActive(false);
             }
         });
@@ -130,31 +120,39 @@ public class GameController {
 
 
 
-    private void smallFieldCompleted(JButton[][] smallField, PlayerDto player) {
-        Arrays.stream(smallField).forEach(field -> Arrays.stream(field).forEach(button -> button.setText("")));
+    private void smallFieldCompleted(List<ButtonDto> smallField, PlayerDto player) {
+        smallField.forEach(button -> button.getButton().setText(""));
         if (player.equals(playerTwo)) {
-            smallField[0][1].setBackground(Color.RED);
-            smallField[1][0].setBackground(Color.RED);
-            smallField[1][2].setBackground(Color.RED);
-            smallField[2][1].setBackground(Color.RED);
+            smallField.get(1).getButton().setBackground(Color.RED);
+            smallField.get(3).getButton().setBackground(Color.RED);
+            smallField.get(5).getButton().setBackground(Color.RED);
+            smallField.get(7).getButton().setBackground(Color.RED);
         } else if (player.equals(playerOne)) {
-            smallField[0][0].setBackground(Color.BLUE);
-            smallField[0][2].setBackground(Color.BLUE);
-            smallField[1][1].setBackground(Color.BLUE);
-            smallField[2][0].setBackground(Color.BLUE);
-            smallField[2][2].setBackground(Color.BLUE);
+            smallField.get(0).getButton().setBackground(Color.BLUE);
+            smallField.get(2).getButton().setBackground(Color.BLUE);
+            smallField.get(4).getButton().setBackground(Color.BLUE);
+            smallField.get(6).getButton().setBackground(Color.BLUE);
+            smallField.get(8).getButton().setBackground(Color.BLUE);
         }
-    }
-
-    public static boolean fieldIsPlayed(JButton button) {
-        return button.getText().equals("O") || button.getText().equals("X");
     }
 
     public List<SmallGridDto> getGrid() {
         return grid;
     }
 
-    public void setNPC(NPC npc) {
-        this.npc = npc;
+    public PlayerDto getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void restart() {
+        currentPlayer = playerOne;
+    }
+
+    public PlayerDto getPlayer(int player) {
+        if (player == 1) {
+            return playerOne;
+        } else {
+            return playerTwo;
+        }
     }
 }

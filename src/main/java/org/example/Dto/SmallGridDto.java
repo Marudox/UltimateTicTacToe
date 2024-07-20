@@ -1,19 +1,25 @@
 package org.example.Dto;
 
-import javax.swing.*;
+import java.util.List;
 
 public class SmallGridDto {
-    private JButton[][] smallGrid;
+    private List<ButtonDto> smallGrid;
     private boolean isActive;
     private boolean won = false;
     private PlayerDto winner;
 
 
-    public SmallGridDto(JButton[][] smallGrid, boolean isActive) {
+    public SmallGridDto(List<ButtonDto> smallGrid, boolean isActive) {
         this.smallGrid = smallGrid;
         this.isActive = isActive;
     }
 
+    public SmallGridDto(List<ButtonDto> smallGrid, boolean isActive, boolean won, PlayerDto winner) {
+        this.smallGrid = smallGrid;
+        this.isActive = isActive;
+        this.won = won;
+        this.winner = winner;
+    }
 
     public boolean isActive() {
         return isActive;
@@ -23,11 +29,11 @@ public class SmallGridDto {
         isActive = active;
     }
 
-    public JButton[][] getSmallGrid() {
+    public List<ButtonDto> getSmallGrid() {
         return smallGrid;
     }
 
-    public void setSmallGrid(JButton[][] smallGrid) {
+    public void setSmallGrid(List<ButtonDto> smallGrid) {
         this.smallGrid = smallGrid;
     }
 
@@ -35,8 +41,8 @@ public class SmallGridDto {
         return won;
     }
 
-    public String getWinnerSymbole() {
-        return winner.getPlayerSymbol();
+    public PlayerDto getWinner() {
+        return winner;
     }
 
     public void setWinner(PlayerDto player) {
