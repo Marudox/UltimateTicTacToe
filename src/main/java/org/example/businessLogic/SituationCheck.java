@@ -1,12 +1,12 @@
-package org.example.BusinessLogic;
+package org.example.businessLogic;
 
-import org.example.Dto.ButtonDto;
-import org.example.Dto.PlayerDto;
-import org.example.Dto.SmallGridDto;
+import org.example.dto.ButtonDto;
+import org.example.dto.PlayerDto;
+import org.example.dto.SmallGridDto;
 
 import java.util.List;
 
-public class WinCheck {
+public class SituationCheck {
 
     public static boolean checkBigWin(List<SmallGridDto> grid) {
         return checkBigColumnWin(grid) || checkBigRowWin(grid) || checkBigDiagonalWin(grid);
@@ -99,5 +99,14 @@ public class WinCheck {
             }
         }
         return false;
+    }
+
+    public static boolean tieCheck(List<SmallGridDto> grid) {
+        for (SmallGridDto smallGridDto : grid) {
+            if (!smallGridDto.isWon()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

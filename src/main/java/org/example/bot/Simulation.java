@@ -1,9 +1,10 @@
-package org.example.Bot;
+package org.example.bot;
 
-import org.example.BusinessLogic.GameController;
-import org.example.Dto.ButtonDto;
-import org.example.Dto.PlayerDto;
-import org.example.Dto.SmallGridDto;
+import org.example.businessLogic.GameController;
+import org.example.Difficulty;
+import org.example.dto.ButtonDto;
+import org.example.dto.PlayerDto;
+import org.example.dto.SmallGridDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,27 +13,32 @@ import java.util.Random;
 public class Simulation {
 
     private final SimulationGameController gameController;
-    private final List<SmallGridDto> previousGrid;
+    private List<SmallGridDto> previousGrid;
+    private final Difficulty difficulty;
 
-    public Simulation(GameController gameController, List<SmallGridDto> previousGrid) {
-        this.gameController = new SimulationGameController(gameController.getGrid(),
+    public Simulation(GameController gameController, Difficulty difficulty) {
+        this.previousGrid = SimulationGameController.copyGrid(gameController.getGrid());
+        this.gameController = new SimulationGameController(this.previousGrid,
                 gameController.getCurrentPlayer(),
                 gameController.getPlayer(1),
                 gameController.getPlayer(2));
-        this.previousGrid = previousGrid;
+        this.difficulty = difficulty;
     }
 
     public int[] simulate(PlayerDto movePlayer) {
+        if (gameController.isGameOver()) {
+            return new int[]{-1, -1, (int) Double.POSITIVE_INFINITY};
+        }
         int[] count = new int[3];
-        for (int i = 0; i < 2000; i++) {
-            count[makeRandomMove(movePlayer) + 1]++;
+        for (int i = 0; i < difficulty.getSimulations(); i++) {
+            count[makeRandomMoves(movePlayer) + 1]++;
             gameController.setGrid(previousGrid);
         }
         return count;
     }
 
-    public int makeRandomMove(PlayerDto movePlayer) {
-        while (!gameController.isGameWon()) {
+    public int makeRandomMoves(PlayerDto movePlayer) {
+        while (!gameController.isGameOver()) {
             List<int[]> moves = getListOfMoves(gameController.getGrid());
 
             if (!moves.isEmpty()) {
@@ -56,6 +62,11 @@ public class Simulation {
         ButtonDto buttonDto = smallGridDto.getSmallGrid().get(move[1]);
 
         gameController.pressButton(smallGridDto, buttonDto);
+    }
+
+    public void makePlanedMove(int[] move) {
+        makeMove(move);
+        this.previousGrid =  SimulationGameController.copyGrid( this.gameController.getGrid());
     }
 
     public static List<int[]> getListOfMoves(List<SmallGridDto> grid) {

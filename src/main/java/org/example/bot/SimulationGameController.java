@@ -1,22 +1,21 @@
-package org.example.Bot;
+package org.example.bot;
 
-import org.example.BusinessLogic.GameController;
-import org.example.Dto.ButtonDto;
-import org.example.Dto.PlayerDto;
-import org.example.Dto.SmallGridDto;
+import org.example.businessLogic.GameController;
+import org.example.dto.ButtonDto;
+import org.example.dto.PlayerDto;
+import org.example.dto.SmallGridDto;
 import org.example.Modes;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.BusinessLogic.WinCheck.checkBigWin;
-import static org.example.BusinessLogic.WinCheck.checkSmallWin;
+import static org.example.businessLogic.SituationCheck.*;
 
 public class SimulationGameController extends GameController {
 
     PlayerDto currentPlayer;
-    PlayerDto playerOne;
-    PlayerDto playerTwo;
+    final PlayerDto playerOne;
+    final PlayerDto playerTwo;
 
     public SimulationGameController(List<SmallGridDto> grid, PlayerDto currentPlayer, PlayerDto playerOne, PlayerDto playerTwo) {
         super(null, Modes.PVP, playerOne, playerTwo);
@@ -26,7 +25,7 @@ public class SimulationGameController extends GameController {
         super.setGrid(copyGrid(grid));
     }
 
-    private List<SmallGridDto> copyGrid(List<SmallGridDto> grid) {
+    public static List<SmallGridDto> copyGrid(List<SmallGridDto> grid) {
         List<SmallGridDto> newGrid = new ArrayList<>();
         for (SmallGridDto smallGridDto : grid) {
             List<ButtonDto> newSmallGrid = new ArrayList<>();
@@ -49,7 +48,7 @@ public class SimulationGameController extends GameController {
 
         enableField(field);
 
-        if (checkBigWin(super.getGrid())) {
+        if (checkBigWin(super.getGrid()) || tieCheck(super.getGrid())) {
             return;
         }
 
@@ -60,8 +59,8 @@ public class SimulationGameController extends GameController {
         }
     }
 
-    public boolean isGameWon() {
-        return checkBigWin(super.getGrid());
+    public boolean isGameOver() {
+        return checkBigWin(super.getGrid()) || tieCheck(super.getGrid());
     }
 
     public void enableField(int field) {

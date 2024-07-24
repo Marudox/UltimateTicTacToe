@@ -1,10 +1,11 @@
-package org.example.GUI;
+package org.example.gui;
 
-import org.example.Bot.NPC;
-import org.example.BusinessLogic.GameController;
-import org.example.Dto.ButtonDto;
-import org.example.Dto.PlayerDto;
-import org.example.Dto.SmallGridDto;
+import org.example.bot.NPC;
+import org.example.businessLogic.GameController;
+import org.example.Difficulty;
+import org.example.dto.ButtonDto;
+import org.example.dto.PlayerDto;
+import org.example.dto.SmallGridDto;
 import org.example.Modes;
 
 import javax.swing.*;
@@ -24,7 +25,11 @@ public class PlayBoard extends JFrame implements ActionListener {
     private final JButton button;
     private final JButton bRestart;
 
-    public PlayBoard(Modes mode) {
+    public PlayBoard(Modes modes) {
+        this(modes, Difficulty.EASY);
+    }
+
+    public PlayBoard(Modes mode, Difficulty difficulty) {
         super("Ultimate Tic-Tac-Toe");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(650, 500);
@@ -39,7 +44,7 @@ public class PlayBoard extends JFrame implements ActionListener {
         PlayerDto playerTwo = new PlayerDto(2, "O");
         if (mode == Modes.PVC) {
             gameController = new GameController(this, mode, playerOne, playerTwo);
-            playerTwo.setNPC(new NPC(gameController));
+            playerTwo.setNPC(new NPC(gameController, difficulty));
         } else if (mode == Modes.PVP) {
             gameController = new GameController(this, mode, playerOne, playerTwo);
         }
@@ -87,15 +92,6 @@ public class PlayBoard extends JFrame implements ActionListener {
         }
     }
 
-    private void restart() {
-        deleteOldBoard();
-        createBoard();
-        gameController.restart();
-        updateCurrentPlayer(gameController.getCurrentPlayer());
-        this.update(this.getGraphics());
-    }
-
-
     private SmallGridDto createButtonGrid(int index) {
         JButton[][] grid = new JButton[3][3];
         List<ButtonDto> buttons = new ArrayList<>();
@@ -103,11 +99,11 @@ public class PlayBoard extends JFrame implements ActionListener {
             for (int j = 0; j < 3; j++) {
                 grid[i][j] = new JButton();
                 if (index <= 3) {
-                    grid[i][j].setBounds(WIDTH * j + (3*WIDTH+SPACE)*(index-1), HEIGHT * i, WIDTH, HEIGHT);
+                    grid[i][j].setBounds(WIDTH * j + (3 * WIDTH + SPACE) * (index - 1), HEIGHT * i, WIDTH, HEIGHT);
                 } else if (index <= 6) {
-                    grid[i][j].setBounds(WIDTH * j + (3*WIDTH+SPACE)*(index-4), HEIGHT * i + (3*WIDTH+SPACE), WIDTH, HEIGHT);
+                    grid[i][j].setBounds(WIDTH * j + (3 * WIDTH + SPACE) * (index - 4), HEIGHT * i + (3 * WIDTH + SPACE), WIDTH, HEIGHT);
                 } else {
-                    grid[i][j].setBounds(WIDTH * j + (3*WIDTH+SPACE)*(index-7), HEIGHT * i + 2*(3*WIDTH+SPACE), WIDTH, HEIGHT);
+                    grid[i][j].setBounds(WIDTH * j + (3 * WIDTH + SPACE) * (index - 7), HEIGHT * i + 2 * (3 * WIDTH + SPACE), WIDTH, HEIGHT);
                 }
 
                 grid[i][j].setEnabled(true);
@@ -130,27 +126,22 @@ public class PlayBoard extends JFrame implements ActionListener {
         return new SmallGridDto(buttons, true);
     }
 
+    private void restart() {
+        this.dispose();
+        new ModeSelection();
+    }
 
     public void showWinDialog(PlayerDto player) {
-        restart();
         JOptionPane.showMessageDialog(this, "Player " + player.getPlayerNumber() + " won!");
-        this.setEnabled(true);
-    }
-
-    private void deleteOldBoard() {
-        gameController.getGrid().forEach(smallGridDto -> {
-            if (smallGridDto != null && !smallGridDto.isWon()) {
-                List<ButtonDto> smallField = smallGridDto.getSmallGrid();
-                smallField.forEach(button -> this.remove(button.getButton()));
-            }
-        });
-    }
-
-    public GameController getGameController() {
-        return gameController;
+        restart();
     }
 
     public void updateCurrentPlayer(PlayerDto currentPlayer) {
         label.setText("Current player: " + currentPlayer.getPlayerNumber());
+    }
+
+    public void showTieDialog() {
+        JOptionPane.showMessageDialog(this, "Tie!");
+        restart();
     }
 }

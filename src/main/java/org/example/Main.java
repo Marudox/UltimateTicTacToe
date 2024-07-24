@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.GUI.ModeSelection;
+import org.example.gui.ModeSelection;
 
 public class Main {
     public static void main(String[] args) {

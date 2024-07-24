@@ -1,6 +1,5 @@
-package org.example.GUI;
+package org.example.gui;
 
-import org.example.Bot.NPC;
 import org.example.Modes;
 
 import javax.swing.*;
@@ -33,10 +32,15 @@ public class ModeSelection extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bPvP) {
             new PlayBoard(Modes.PVP);
+            this.dispose();
         }
         if (e.getSource() == bPvC) {
-            PlayBoard playBoard = new PlayBoard(Modes.PVC);
-            new NPC(playBoard.getGameController());
+            createDifficultySelection();
+            this.dispose();
         }
+    }
+
+    private void createDifficultySelection() {
+        new DifficultySelection();
     }
 }

@@ -1,9 +1,9 @@
-package org.example.BusinessLogic;
+package org.example.businessLogic;
 
-import org.example.Dto.ButtonDto;
-import org.example.Dto.PlayerDto;
-import org.example.GUI.PlayBoard;
-import org.example.Dto.SmallGridDto;
+import org.example.dto.ButtonDto;
+import org.example.dto.PlayerDto;
+import org.example.gui.PlayBoard;
+import org.example.dto.SmallGridDto;
 import org.example.Modes;
 
 import javax.swing.*;
@@ -11,20 +11,16 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.BusinessLogic.WinCheck.checkBigWin;
-import static org.example.BusinessLogic.WinCheck.checkSmallWin;
+import static org.example.businessLogic.SituationCheck.*;
 
 public class GameController {
 
     private List<SmallGridDto> grid = new ArrayList<>();
-    private PlayBoard playBoard;
-    private PlayerDto playerOne;
-    private PlayerDto playerTwo;
+    private final PlayBoard playBoard;
+    private final PlayerDto playerOne;
+    private final PlayerDto playerTwo;
     private PlayerDto currentPlayer;
-    private Modes mode;
-    public GameController() {
-
-    }
+    private final Modes mode;
 
     public GameController(PlayBoard playBoard, Modes mode, PlayerDto playerOne, PlayerDto playerTwo) {
         this.playBoard = playBoard;
@@ -34,6 +30,9 @@ public class GameController {
         currentPlayer = playerOne;
     }
 
+    public GameController() {
+        this(null, Modes.TEST, new PlayerDto(1, "X"), new PlayerDto(2, "O"));
+    }
 
 
     public void pressButton(SmallGridDto smallGridDto, ButtonDto buttonDto) {
@@ -60,6 +59,7 @@ public class GameController {
             smallGridDto.setWinner(currentPlayer);
         }
 
+
         int field = smallGridDto.getSmallGrid().indexOf(buttonDto);
 
         enableField(field);
@@ -67,6 +67,8 @@ public class GameController {
         if (checkBigWin(grid)) {
             disableButtons();
             playBoard.showWinDialog(currentPlayer);
+        } else if (tieCheck(grid)) {
+            playBoard.showTieDialog();
         } else {
             if (currentPlayer == playerOne) {
                 currentPlayer = playerTwo;
@@ -143,10 +145,6 @@ public class GameController {
 
     public PlayerDto getCurrentPlayer() {
         return currentPlayer;
-    }
-
-    public void restart() {
-        currentPlayer = playerOne;
     }
 
     public PlayerDto getPlayer(int player) {

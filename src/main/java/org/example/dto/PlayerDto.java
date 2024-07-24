@@ -1,6 +1,6 @@
-package org.example.Dto;
+package org.example.dto;
 
-import org.example.Bot.NPC;
+import org.example.bot.NPC;
 
 public class PlayerDto {
     private final int playerNumber;
