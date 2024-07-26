@@ -11,13 +11,12 @@ import org.example.Modes;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayBoard extends JFrame implements ActionListener {
-    public final int SPACE = 5;
-    public final int WIDTH = 50;
-    public final int HEIGHT = 50;
+    public static final int SPACE = 5;
+    public static final int WIDTH = 50;
+    public static final int HEIGHT = 50;
 
     private GameController gameController;
 
@@ -45,7 +44,7 @@ public class PlayBoard extends JFrame implements ActionListener {
         if (mode == Modes.PVC) {
             gameController = new GameController(this, mode, playerOne, playerTwo);
             playerTwo.setNPC(new NPC(gameController, difficulty));
-        } else if (mode == Modes.PVP) {
+        } else if (mode == Modes.PVP || mode == Modes.TEST) {
             gameController = new GameController(this, mode, playerOne, playerTwo);
         }
 
@@ -64,13 +63,13 @@ public class PlayBoard extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    private void createBoard() {
-        List<SmallGridDto> grid = new ArrayList<>();
+    public void createBoard() {
+        gameController.createGrid();
+        List<SmallGridDto> grid = gameController.getGrid();
 
         for (int i = 0; i < 9; i++) {
-            grid.add(createButtonGrid(i + 1));
+            grid.set(i, createButtonGrid(i+1));
         }
-        gameController.setGrid(grid);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class PlayBoard extends JFrame implements ActionListener {
 
     private SmallGridDto createButtonGrid(int index) {
         JButton[][] grid = new JButton[3][3];
-        List<ButtonDto> buttons = new ArrayList<>();
+        List<ButtonDto> buttons = gameController.getGrid().get(index-1).getSmallGrid();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 grid[i][j] = new JButton();
@@ -110,17 +109,6 @@ public class PlayBoard extends JFrame implements ActionListener {
                 grid[i][j].addActionListener(this);
                 this.add(grid[i][j]);
                 buttons.add(new ButtonDto(grid[i][j]));
-            }
-        }
-        for (int i = 0; i < 9; i++) {
-            JButton button = new JButton();
-            if (i <= 3) {
-                button.setBounds(WIDTH * i + SPACE, HEIGHT * i + SPACE, WIDTH, HEIGHT);
-            } else if (i <= 6) {
-                button.setBounds(WIDTH * i + SPACE, HEIGHT * i + SPACE, WIDTH, HEIGHT);
-            } else {
-                button.setBounds(WIDTH * i + SPACE, HEIGHT * i + SPACE, WIDTH, HEIGHT);
-
             }
         }
         return new SmallGridDto(buttons, true);
@@ -143,5 +131,9 @@ public class PlayBoard extends JFrame implements ActionListener {
     public void showTieDialog() {
         JOptionPane.showMessageDialog(this, "Tie!");
         restart();
+    }
+
+    public GameController getGameController() {
+        return gameController;
     }
 }

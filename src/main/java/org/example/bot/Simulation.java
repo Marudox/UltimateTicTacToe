@@ -75,7 +75,7 @@ public class Simulation {
             List<ButtonDto> smallField = grid.get(i).getSmallGrid();
             if (grid.get(i).isActive() && !grid.get(i).isWon()) {
                 for (int j = 0; j < 9; j++) {
-                    if (!smallField.get(j).isPlayed()) {
+                    if (!smallField.get(j).isPressed()) {
                         moves.add(new int[]{i, j});
                     }
                 }

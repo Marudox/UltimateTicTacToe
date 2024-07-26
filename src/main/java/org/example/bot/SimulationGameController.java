@@ -29,7 +29,7 @@ public class SimulationGameController extends GameController {
         List<SmallGridDto> newGrid = new ArrayList<>();
         for (SmallGridDto smallGridDto : grid) {
             List<ButtonDto> newSmallGrid = new ArrayList<>();
-            smallGridDto.getSmallGrid().forEach(buttonDto -> newSmallGrid.add(new ButtonDto(buttonDto.getPlayer(), buttonDto.isPlayed())));
+            smallGridDto.getSmallGrid().forEach(buttonDto -> newSmallGrid.add(new ButtonDto(buttonDto.getPlayer(), buttonDto.isPressed())));
             newGrid.add(new SmallGridDto(newSmallGrid, smallGridDto.isActive(), smallGridDto.isWon(), smallGridDto.getWinner()));
         }
         return newGrid;

@@ -38,7 +38,6 @@ public class NPC {
                         highestValueIndex = i;
                     }
                 }
-                System.out.println(movesResults);
                 return moves.get(highestValueIndex);
             }
         }

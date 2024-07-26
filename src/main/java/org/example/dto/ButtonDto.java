@@ -31,7 +31,7 @@ public class ButtonDto {
         this.player = player;
     }
 
-    public boolean isPlayed() {
+    public boolean isPressed() {
         return played;
     }
 

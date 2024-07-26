@@ -12,7 +12,7 @@ public class SituationCheck {
         return checkBigColumnWin(grid) || checkBigRowWin(grid) || checkBigDiagonalWin(grid);
     }
 
-    private static boolean checkBigDiagonalWin(List<SmallGridDto> grid) {
+    public static boolean checkBigDiagonalWin(List<SmallGridDto> grid) {
         if (grid.get(4).isWon()) {
             PlayerDto winner = grid.get(4).getWinner();
             if (grid.get(0).isWon() && grid.get(0).getWinner().equals(winner)) {
@@ -24,7 +24,7 @@ public class SituationCheck {
         return false;
     }
 
-    private static boolean checkBigRowWin(List<SmallGridDto> grid) {
+    public static boolean checkBigRowWin(List<SmallGridDto> grid) {
         return checkBigRow(grid, 0) || checkBigRow(grid, 1) || checkBigRow(grid, 2);
     }
 
@@ -39,7 +39,7 @@ public class SituationCheck {
         return false;
     }
 
-    private static boolean checkBigColumnWin(List<SmallGridDto> grid) {
+    public static boolean checkBigColumnWin(List<SmallGridDto> grid) {
         return checkBigColumn(grid, 0) || checkBigColumn(grid, 1) || checkBigColumn(grid, 2);
     }
 
@@ -57,45 +57,45 @@ public class SituationCheck {
 
     public static boolean checkSmallWin(SmallGridDto smallGridDto) {
         List<ButtonDto> smallField = smallGridDto.getSmallGrid();
-        return checkRowWin(smallField) || checkColumnWin(smallField) || checkDiagonalSmallWin(smallField);
+        return checkSmallRowWin(smallField) || checkSmallColumnWin(smallField) || checkDiagonalSmallWin(smallField);
     }
 
-    private static boolean checkDiagonalSmallWin(List<ButtonDto> grid) {
-        if (grid.get(4).isPlayed()) {
+    public static boolean checkDiagonalSmallWin(List<ButtonDto> grid) {
+        if (grid.get(4).isPressed()) {
             PlayerDto winner = grid.get(4).getPlayer();
-            if (grid.get(0).isPlayed() && grid.get(0).getPlayer().equals(winner)) {
-                return grid.get(8).isPlayed() && grid.get(8).getPlayer().equals(winner);
-            } else if (grid.get(2).isPlayed() && grid.get(2).getPlayer().equals(winner)) {
-                return grid.get(6).isPlayed() && grid.get(6).getPlayer().equals(winner);
+            if (grid.get(0).isPressed() && grid.get(0).getPlayer().equals(winner)) {
+                return grid.get(8).isPressed() && grid.get(8).getPlayer().equals(winner);
+            } else if (grid.get(2).isPressed() && grid.get(2).getPlayer().equals(winner)) {
+                return grid.get(6).isPressed() && grid.get(6).getPlayer().equals(winner);
             }
         }
         return false;
     }
 
-    private static boolean checkColumnWin(List<ButtonDto> smallField) {
-        return checkColumn(smallField, 0) || checkColumn(smallField, 1) || checkColumn(smallField, 2);
+    public static boolean checkSmallColumnWin(List<ButtonDto> smallField) {
+        return checkSmallColumn(smallField, 0) || checkSmallColumn(smallField, 1) || checkSmallColumn(smallField, 2);
     }
 
-    private static boolean checkColumn(List<ButtonDto> grid, int column) {
-        if (grid.get(column + 3).isPlayed()) {
+    private static boolean checkSmallColumn(List<ButtonDto> grid, int column) {
+        if (grid.get(column + 3).isPressed()) {
             PlayerDto winner = grid.get(column + 3).getPlayer();
-            if (grid.get(column).isPlayed() && grid.get(column).getPlayer().equals(winner)) {
-                return grid.get(column + 6).isPlayed() && grid.get(column + 6).getPlayer().equals(winner);
+            if (grid.get(column).isPressed() && grid.get(column).getPlayer().equals(winner)) {
+                return grid.get(column + 6).isPressed() && grid.get(column + 6).getPlayer().equals(winner);
             }
         }
         return false;
     }
 
-    private static boolean checkRowWin(List<ButtonDto> smallField) {
-        return checkRow(smallField, 0) || checkRow(smallField, 1) || checkRow(smallField, 2);
+    public static boolean checkSmallRowWin(List<ButtonDto> smallField) {
+        return checkSmallRow(smallField, 0) || checkSmallRow(smallField, 1) || checkSmallRow(smallField, 2);
     }
 
-    private static boolean checkRow(List<ButtonDto> grid, int row) {
+    private static boolean checkSmallRow(List<ButtonDto> grid, int row) {
         row *= 3;
-        if (grid.get(row + 1).isPlayed()) {
+        if (grid.get(row + 1).isPressed()) {
             PlayerDto winner = grid.get(row + 1).getPlayer();
-            if (grid.get(row).isPlayed() && grid.get(row).getPlayer().equals(winner)) {
-                return grid.get(row + 2).isPlayed() && grid.get(row + 2).getPlayer().equals(winner);
+            if (grid.get(row).isPressed() && grid.get(row).getPlayer().equals(winner)) {
+                return grid.get(row + 2).isPressed() && grid.get(row + 2).getPlayer().equals(winner);
             }
         }
         return false;

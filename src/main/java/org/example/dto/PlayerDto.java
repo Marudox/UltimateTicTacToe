@@ -2,17 +2,19 @@ package org.example.dto;
 
 import org.example.bot.NPC;
 
+import java.awt.*;
+
 public class PlayerDto {
     private final int playerNumber;
     private final String playerSymbol;
-    private final String playerColor;
+    private final Color playerColor;
     private boolean isNPC;
     private NPC npc;
 
     public PlayerDto(int playerNumber, String playerSymbol) {
         this.playerNumber = playerNumber;
         this.playerSymbol = playerSymbol;
-        playerColor = "X".equals(playerSymbol) ? "blue" : "red";
+        playerColor = "X".equals(playerSymbol) ? Color.BLUE: Color.RED;
         this.isNPC = false;
         this.npc = null;
     }
@@ -25,7 +27,7 @@ public class PlayerDto {
         return playerSymbol;
     }
 
-    public String getPlayerColor() {
+    public Color getPlayerColor() {
         return playerColor;
     }
 

@@ -7,7 +7,6 @@ import org.example.dto.SmallGridDto;
 import org.example.Modes;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class GameController {
         }
         buttonDto.setPlayed(true);
         buttonDto.setPlayer(currentPlayer);
-        button.setText("<html><font color = "+currentPlayer.getPlayerColor()+">"+currentPlayer.getPlayerSymbol()+"</font></html>");
+        button.setText(currentPlayer.getPlayerSymbol());
         button.setEnabled(false);
 
         disableButtons();
@@ -100,7 +99,7 @@ public class GameController {
         if (grid.get(field) != null && !grid.get(field).isWon()) {
             SmallGridDto smallField = grid.get(field);
             smallField.getSmallGrid().forEach(button -> {
-                if (!button.isPlayed()) {
+                if (!button.isPressed()) {
                     button.getButton().setEnabled(true);
                 }
             });
@@ -120,20 +119,18 @@ public class GameController {
         });
     }
 
-
-
     private void smallFieldCompleted(List<ButtonDto> smallField, PlayerDto player) {
         smallField.forEach(button -> button.getButton().setText(""));
         if (player.equals(playerTwo)) {
             for (int i = 0; i < 9; i++) {
                 if (i % 2 != 0) {
-                    smallField.get(i).getButton().setBackground(Color.RED);
+                    smallField.get(i).getButton().setBackground(player.getPlayerColor());
                 }
             }
         } else if (player.equals(playerOne)) {
             for (int i = 0; i < 9; i++) {
                 if (i % 2 == 0) {
-                    smallField.get(i).getButton().setBackground(Color.BLUE);
+                    smallField.get(i).getButton().setBackground(player.getPlayerColor());
                 }
             }
         }
@@ -152,6 +149,13 @@ public class GameController {
             return playerOne;
         } else {
             return playerTwo;
+        }
+    }
+
+    public void createGrid() {
+        grid = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            grid.add(new SmallGridDto(new ArrayList<>(), true));
         }
     }
 }
