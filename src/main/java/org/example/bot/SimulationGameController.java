@@ -13,15 +13,9 @@ import static org.example.businessLogic.SituationCheck.*;
 
 public class SimulationGameController extends GameController {
 
-    PlayerDto currentPlayer;
-    final PlayerDto playerOne;
-    final PlayerDto playerTwo;
-
     public SimulationGameController(List<SmallGridDto> grid, PlayerDto currentPlayer, PlayerDto playerOne, PlayerDto playerTwo) {
         super(null, Modes.PVP, playerOne, playerTwo);
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
-        this.currentPlayer = currentPlayer;
+        super.currentPlayer = currentPlayer;
         super.setGrid(copyGrid(grid));
     }
 
@@ -85,7 +79,7 @@ public class SimulationGameController extends GameController {
         super.setGrid(copyGrid(grid));
     }
 
-    public PlayerDto getCurrentPlayer() {
-        return currentPlayer;
+    public List<SmallGridDto> getGrid() {
+        return super.getGrid();
     }
 }

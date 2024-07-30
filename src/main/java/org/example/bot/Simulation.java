@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.example.businessLogic.SituationCheck.tieCheck;
+
 public class Simulation {
 
     private final SimulationGameController gameController;
@@ -45,15 +47,17 @@ public class Simulation {
                 Random random = new Random();
                 int randomMove = random.nextInt(moves.size());
                 makeMove(moves.get(randomMove));
-            } else {
-                return 0;
             }
         }
-        PlayerDto winner = gameController.getCurrentPlayer();
-        if (winner == movePlayer) {
-            return 1;
-        } else {
-            return -1;
+        if (tieCheck(gameController.getGrid())) {
+            return 0;
+        }else {
+            PlayerDto winner = gameController.getCurrentPlayer();
+            if (winner == movePlayer) {
+                return 1;
+            } else {
+                return -1;
+            }
         }
     }
 
@@ -61,12 +65,12 @@ public class Simulation {
         SmallGridDto smallGridDto = gameController.getGrid().get(move[0]);
         ButtonDto buttonDto = smallGridDto.getSmallGrid().get(move[1]);
 
-        gameController.pressButton(smallGridDto, buttonDto);
+        this.gameController.pressButton(smallGridDto, buttonDto);
     }
 
     public void makePlanedMove(int[] move) {
         makeMove(move);
-        this.previousGrid =  SimulationGameController.copyGrid( this.gameController.getGrid());
+        this.previousGrid =  SimulationGameController.copyGrid(this.gameController.getGrid());
     }
 
     public static List<int[]> getListOfMoves(List<SmallGridDto> grid) {
@@ -82,5 +86,13 @@ public class Simulation {
             }
         }
         return moves;
+    }
+
+    public List<SmallGridDto> getGrid() {
+        return gameController.getGrid();
+    }
+
+    public SimulationGameController getGameController() {
+        return gameController;
     }
 }

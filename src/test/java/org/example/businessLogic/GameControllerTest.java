@@ -35,6 +35,7 @@ class GameControllerTest {
     @Test
     void createGrid() {
         assertEquals(9, gameController.getGrid().size());
+        gameController.getGrid().forEach(smallGridDto -> assertEquals(9, smallGridDto.getSmallGrid().size()));
     }
 
     @Test

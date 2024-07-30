@@ -64,7 +64,6 @@ public class PlayBoard extends JFrame implements ActionListener {
     }
 
     public void createBoard() {
-        gameController.createGrid();
         List<SmallGridDto> grid = gameController.getGrid();
 
         for (int i = 0; i < 9; i++) {
@@ -94,6 +93,7 @@ public class PlayBoard extends JFrame implements ActionListener {
     private SmallGridDto createButtonGrid(int index) {
         JButton[][] grid = new JButton[3][3];
         List<ButtonDto> buttons = gameController.getGrid().get(index-1).getSmallGrid();
+        buttons.clear();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 grid[i][j] = new JButton();

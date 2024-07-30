@@ -16,9 +16,9 @@ public class GameController {
 
     private List<SmallGridDto> grid = new ArrayList<>();
     private final PlayBoard playBoard;
-    private final PlayerDto playerOne;
-    private final PlayerDto playerTwo;
-    private PlayerDto currentPlayer;
+    protected final PlayerDto playerOne;
+    protected final PlayerDto playerTwo;
+    protected PlayerDto currentPlayer;
     private final Modes mode;
 
     public GameController(PlayBoard playBoard, Modes mode, PlayerDto playerOne, PlayerDto playerTwo) {
@@ -27,6 +27,7 @@ public class GameController {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         currentPlayer = playerOne;
+        createGrid();
     }
 
     public GameController() {
@@ -99,7 +100,7 @@ public class GameController {
         if (grid.get(field) != null && !grid.get(field).isWon()) {
             SmallGridDto smallField = grid.get(field);
             smallField.getSmallGrid().forEach(button -> {
-                if (!button.isPressed()) {
+                if (!button.isPressed() && button.getButton() != null) {
                     button.getButton().setEnabled(true);
                 }
             });
@@ -113,7 +114,11 @@ public class GameController {
         grid.forEach(smallGridDto -> {
             List<ButtonDto> smallField = smallGridDto.getSmallGrid();
             if (smallField != null) {
-                smallField.forEach(button -> button.getButton().setEnabled(false));
+                smallField.forEach(button -> {
+                            if (button.getButton() != null) {
+                                button.getButton().setEnabled(false);
+                            }
+                        });
                 smallGridDto.setActive(false);
             }
         });
@@ -155,7 +160,11 @@ public class GameController {
     public void createGrid() {
         grid = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            grid.add(new SmallGridDto(new ArrayList<>(), true));
+            List<ButtonDto> smallField = new ArrayList<>();
+            for (int j = 0; j < 9; j++) {
+                smallField.add(new ButtonDto(null, false));
+            }
+            grid.add(new SmallGridDto(smallField, true));
         }
     }
 }

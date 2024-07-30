@@ -102,11 +102,17 @@ public class SituationCheck {
     }
 
     public static boolean tieCheck(List<SmallGridDto> grid) {
+        boolean isTie = true;
         for (SmallGridDto smallGridDto : grid) {
             if (!smallGridDto.isWon()) {
-                return false;
+                boolean hasUnpressedButton = smallGridDto.getSmallGrid().stream()
+                        .anyMatch(buttonDto -> !buttonDto.isPressed());
+                if (hasUnpressedButton) {
+                    isTie = false;
+                    break;
+                }
             }
         }
-        return true;
+        return isTie;
     }
 }

@@ -19,8 +19,8 @@ class PlayBoardTest {
         board.dispose();
         List<SmallGridDto> grid = board.getGameController().getGrid();
         grid.forEach(smallGridDto -> {
-            smallGridDto.getSmallGrid().forEach(buttonDto -> assertNotNull(buttonDto.getButton()));
             assertEquals(9, smallGridDto.getSmallGrid().size());
+            smallGridDto.getSmallGrid().forEach(buttonDto -> assertNotNull(buttonDto.getButton()));
         });
         assertEquals(9, grid.size());
     }
