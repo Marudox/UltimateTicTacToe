@@ -14,13 +14,13 @@ import static org.example.businessLogic.SituationCheck.tieCheck;
 
 public class Simulation {
 
-    private final SimulationGameController gameController;
+    private final SimulationController gameController;
     private List<SmallGridDto> previousGrid;
     private final Difficulty difficulty;
 
     public Simulation(GameController gameController, Difficulty difficulty) {
-        this.previousGrid = SimulationGameController.copyGrid(gameController.getGrid());
-        this.gameController = new SimulationGameController(this.previousGrid,
+        this.previousGrid = SimulationController.copyGrid(gameController.getGrid());
+        this.gameController = new SimulationController(this.previousGrid,
                 gameController.getCurrentPlayer(),
                 gameController.getPlayer(1),
                 gameController.getPlayer(2));
@@ -70,7 +70,7 @@ public class Simulation {
 
     public void makePlanedMove(int[] move) {
         makeMove(move);
-        this.previousGrid =  SimulationGameController.copyGrid(this.gameController.getGrid());
+        this.previousGrid =  SimulationController.copyGrid(this.gameController.getGrid());
     }
 
     public static List<int[]> getListOfMoves(List<SmallGridDto> grid) {
@@ -92,7 +92,7 @@ public class Simulation {
         return gameController.getGrid();
     }
 
-    public SimulationGameController getGameController() {
+    public SimulationController getGameController() {
         return gameController;
     }
 }

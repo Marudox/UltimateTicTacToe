@@ -7,33 +7,19 @@ import org.example.dto.SmallGridDto;
 import org.example.Modes;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.businessLogic.SituationCheck.*;
 
-public class GameController {
-
-    private List<SmallGridDto> grid = new ArrayList<>();
-    private final PlayBoard playBoard;
-    protected final PlayerDto playerOne;
-    protected final PlayerDto playerTwo;
-    protected PlayerDto currentPlayer;
-    private final Modes mode;
+public class GameController extends Controller {
 
     public GameController(PlayBoard playBoard, Modes mode, PlayerDto playerOne, PlayerDto playerTwo) {
-        this.playBoard = playBoard;
-        this.mode = mode;
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
-        currentPlayer = playerOne;
-        createGrid();
+        super(playBoard, mode, playerOne, playerTwo);
     }
 
     public GameController() {
         this(null, Modes.TEST, new PlayerDto(1, "X"), new PlayerDto(2, "O"));
     }
-
 
     public void pressButton(SmallGridDto smallGridDto, ButtonDto buttonDto) {
         JButton button = buttonDto.getButton();
@@ -84,46 +70,6 @@ public class GameController {
         }
     }
 
-    public void setGrid(List<SmallGridDto> grid) {
-        this.grid = grid;
-    }
-
-    protected void enableAllField() {
-        for (int i = 0; i < 9; i++) {
-            if (!grid.get(i).isWon()) {
-                enableField(i);
-            }
-        }
-    }
-
-    public void enableField(int field) {
-        if (grid.get(field) != null && !grid.get(field).isWon()) {
-            SmallGridDto smallField = grid.get(field);
-            smallField.getSmallGrid().forEach(button -> {
-                if (!button.isPressed() && button.getButton() != null) {
-                    button.getButton().setEnabled(true);
-                }
-            });
-            smallField.setActive(true);
-        } else {
-            enableAllField();
-        }
-    }
-
-    public void disableButtons() {
-        grid.forEach(smallGridDto -> {
-            List<ButtonDto> smallField = smallGridDto.getSmallGrid();
-            if (smallField != null) {
-                smallField.forEach(button -> {
-                            if (button.getButton() != null) {
-                                button.getButton().setEnabled(false);
-                            }
-                        });
-                smallGridDto.setActive(false);
-            }
-        });
-    }
-
     private void smallFieldCompleted(List<ButtonDto> smallField, PlayerDto player) {
         smallField.forEach(button -> button.getButton().setText(""));
         if (player.equals(playerTwo)) {
@@ -138,33 +84,6 @@ public class GameController {
                     smallField.get(i).getButton().setBackground(player.getPlayerColor());
                 }
             }
-        }
-    }
-
-    public List<SmallGridDto> getGrid() {
-        return grid;
-    }
-
-    public PlayerDto getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public PlayerDto getPlayer(int player) {
-        if (player == 1) {
-            return playerOne;
-        } else {
-            return playerTwo;
-        }
-    }
-
-    public void createGrid() {
-        grid = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            List<ButtonDto> smallField = new ArrayList<>();
-            for (int j = 0; j < 9; j++) {
-                smallField.add(new ButtonDto(null, false));
-            }
-            grid.add(new SmallGridDto(smallField, true));
         }
     }
 }

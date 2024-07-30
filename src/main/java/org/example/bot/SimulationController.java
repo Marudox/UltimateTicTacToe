@@ -11,9 +11,9 @@ import java.util.List;
 
 import static org.example.businessLogic.SituationCheck.*;
 
-public class SimulationGameController extends GameController {
+public class SimulationController extends GameController {
 
-    public SimulationGameController(List<SmallGridDto> grid, PlayerDto currentPlayer, PlayerDto playerOne, PlayerDto playerTwo) {
+    public SimulationController(List<SmallGridDto> grid, PlayerDto currentPlayer, PlayerDto playerOne, PlayerDto playerTwo) {
         super(null, Modes.PVP, playerOne, playerTwo);
         super.currentPlayer = currentPlayer;
         super.setGrid(copyGrid(grid));
@@ -31,9 +31,6 @@ public class SimulationGameController extends GameController {
 
     @Override
     public void pressButton(SmallGridDto smallGridDto, ButtonDto buttonDto) {
-        buttonDto.setPlayed(true);
-        buttonDto.setPlayer(currentPlayer);
-
         if (checkSmallWin(smallGridDto)) {
             smallGridDto.setWinner(currentPlayer);
         }
@@ -55,31 +52,5 @@ public class SimulationGameController extends GameController {
 
     public boolean isGameOver() {
         return checkBigWin(super.getGrid()) || tieCheck(super.getGrid());
-    }
-
-    public void enableField(int field) {
-        if (super.getGrid().get(field) != null && !super.getGrid().get(field).isWon()) {
-            super.getGrid().get(field).setActive(true);
-        } else {
-            enableAllField();
-        }
-    }
-
-    @Override
-    protected void enableAllField() {
-        for (int i = 0; i < 9; i++) {
-            if (!super.getGrid().get(i).isWon()) {
-                enableField(i);
-            }
-        }
-    }
-
-    @Override
-    public void setGrid(List<SmallGridDto> grid) {
-        super.setGrid(copyGrid(grid));
-    }
-
-    public List<SmallGridDto> getGrid() {
-        return super.getGrid();
     }
 }
